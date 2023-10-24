@@ -34,16 +34,16 @@ jobs:
         run: find "${OUT_DIR}" -type d ! -name "assets" -exec rm -r {} \;
 
       - name: Delete unnecessary files
-        run: find "${OUT_DIR}" -type f \
-          \( ! -name "*.png" \
-          -a ! -name "*.mcmeta" \
-          -a ! -name "*.json" \
-          -a ! -name "*.dat" \
-          -a ! -name "*.lang" \
-          -a ! -name "*.ttf" \
-          -a ! -name "*.mcfunction" \
-          -a ! -name "*.ogg" \
-          -a ! -name "*.model" \
+        run: find "${OUT_DIR}" -type f
+          \( ! -name "*.png"
+          -a ! -name "*.mcmeta"
+          -a ! -name "*.json"
+          -a ! -name "*.dat"
+          -a ! -name "*.lang"
+          -a ! -name "*.ttf"
+          -a ! -name "*.mcfunction"
+          -a ! -name "*.ogg"
+          -a ! -name "*.model"
           \) -exec rm {} \;
 
       - name: Substitute placeholders

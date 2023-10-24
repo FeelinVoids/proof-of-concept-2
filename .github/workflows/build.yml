@@ -30,6 +30,12 @@ jobs:
       - name: Copy files to container
         run: sudo cp -rT . "${{ env.OUT_DIR }}"
 
+      - name: Show me what you got
+        run: |
+          echo $(ls)
+          echo
+          echo $(ls /build)
+
       - name: Delete unnecessary directories
         run: find "${OUT_DIR}" -type d ! -name "assets" -exec sudo rm -r {} \;
 

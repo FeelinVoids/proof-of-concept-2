@@ -28,7 +28,7 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Copy files to container
-        run: cp -rT . "${{ env.OUT_DIR }}"
+        run: sudo cp -rT . "${{ env.OUT_DIR }}"
 
       - name: Delete unnecessary directories
         run: find "${OUT_DIR}" -type d ! -name "assets" exec rm -r {} \;

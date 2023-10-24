@@ -31,10 +31,10 @@ jobs:
         run: sudo cp -rT . "${{ env.OUT_DIR }}"
 
       - name: Delete unnecessary directories
-        run: find "${{ env.OUT_DIR }}" -type d ! -name "assets" exec rm -r {} \;
+        run: find "${OUT_DIR}" -type d ! -name "assets" -exec rm -r {} \;
 
       - name: Delete unnecessary files
-        run: find "${{ env.OUT_DIR }}" -type f \
+        run: find "${OUT_DIR}" -type f \
           \( ! -name "*.png" \
           -a ! -name "*.mcmeta" \
           -a ! -name "*.json" \
@@ -47,7 +47,7 @@ jobs:
           \) -exec rm {} \;
 
       - name: Substitute placeholders
-        run: find "${{ env.OUT_DIR }}" -maxdepth 1 -type f -exec sed -i "s/%version%/${{ steps.info.outputs.VERSION }}/g" {} +
+        run: find "${OUT_DIR}" -maxdepth 1 -type f -exec sed -i "s/%version%/${VERSION}/g" {} +
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3

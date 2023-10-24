@@ -37,7 +37,7 @@ jobs:
           echo $(ls /build)
 
       - name: Delete unnecessary directories
-        run: find "${OUT_DIR}" -type d ! -name "assets" -exec sudo rm -r {} \;
+        run: find "${OUT_DIR}/*" -maxdepth 0 -type d ! -name "assets" -exec sudo rm -r {} \;
 
       - name: Delete unnecessary files
         run: find "${OUT_DIR}" -type f

@@ -13,7 +13,7 @@ jobs:
       NAME: vapes-rp
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install zip
         run: |

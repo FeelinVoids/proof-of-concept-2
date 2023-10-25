@@ -22,9 +22,7 @@ jobs:
 
       - name: Read version.txt
         id: info
-        run: |
-          VERSION=$(cat "${{ github.workspace }}/version.txt")
-          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=$(cat "${{ github.workspace }}/version.txt")" >> $GITHUB_OUTPUT
 
       - name: Delete unnecessary directories
         run: find "${{ github.workspace }}/"* -maxdepth 0 -type d ! -name "assets" -exec sudo rm -r {} \;
@@ -43,7 +41,7 @@ jobs:
           \) -exec sudo rm {} \;
 
       - name: Substitute placeholders
-        run: find "${{ github.workspace }}" -maxdepth 1 -type f -exec sudo sed -i "s/%version%/${VERSION}/g" {} +
+        run: find "${{ github.workspace }}" -maxdepth 1 -type f -exec sudo sed -i "s/%version%/${{ steps.info.outputs.VERSION }}/g" {} +
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3

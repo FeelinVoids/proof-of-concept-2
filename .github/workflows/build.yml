@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     env:
-      OUT_DIR: /build
       NAME: vapes-rp
 
     steps:
@@ -27,20 +26,11 @@ jobs:
           VERSION=$(cat "${{ github.workspace }}/version.txt")
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
 
-      - name: Copy files to container
-        run: sudo cp -rT . "${{ env.OUT_DIR }}"
-
-      - name: Show me what you got
-        run: |
-          echo $(ls)
-          echo
-          echo $(ls /build)
-
       - name: Delete unnecessary directories
-        run: find "${OUT_DIR}/"* -maxdepth 0 -type d ! -name "assets" -exec sudo rm -r {} \;
+        run: find "${{ github.workspace }}/"* -maxdepth 0 -type d ! -name "assets" -exec sudo rm -r {} \;
 
       - name: Delete unnecessary files
-        run: find "${OUT_DIR}" -type f
+        run: find "${{ github.workspace }}" -type f
           \( ! -name "*.png"
           -a ! -name "*.mcmeta"
           -a ! -name "*.json"
@@ -53,10 +43,10 @@ jobs:
           \) -exec sudo rm {} \;
 
       - name: Substitute placeholders
-        run: find "${OUT_DIR}" -maxdepth 1 -type f -exec sudo sed -i "s/%version%/${VERSION}/g" {} +
+        run: find "${{ github.workspace }}" -maxdepth 1 -type f -exec sudo sed -i "s/%version%/${VERSION}/g" {} +
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3
         with:
           name: ${{ env.NAME }}-${{ steps.info.outputs.VERSION }}
-          path: ${{ env.OUT_DIR }}
+          path: ${{ github.workspace }}

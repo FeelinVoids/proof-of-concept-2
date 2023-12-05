@@ -20,9 +20,22 @@ jobs:
           sudo apt update
           sudo apt install -y zip
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Read version.txt
-        id: info
-        run: echo "VERSION=$(cat "${{ github.workspace }}/version.txt")" >> $GITHUB_OUTPUT
+        id: version
+        run: |
+          echo "VERSION=$(cat "${{ github.workspace }}/version.txt")" >> $GITHUB_OUTPUT
+
+      - name: Substitute version placeholder
+        run: find "${{ github.workspace }}" -maxdepth 1 -type f -exec sudo sed -i "s/%version%/${{ steps.version.outputs.VERSION }}/g" {} +
+
+      - name: Compile lore
+        id: compilelore
+        run: echo "LORE=$(java -jar mm2json-1.0-SNAPSHOT-all.jar -f lore.txt)" >> $GITHUB_OUTPUT
 
       - name: Delete unnecessary directories
         run: find "${{ github.workspace }}/"* -maxdepth 0 -type d ! -name "assets" -exec sudo rm -r {} \;
@@ -40,11 +53,11 @@ jobs:
           -a ! -name "*.model"
           \) -exec sudo rm {} \;
 
-      - name: Substitute placeholders
-        run: find "${{ github.workspace }}" -maxdepth 1 -type f -exec sudo sed -i "s/%version%/${{ steps.info.outputs.VERSION }}/g" {} +
+      - name: Substitute lore placeholder
+        run: find "${{ github.workspace }}" -maxdepth 1 -type f -exec sudo sed -i "s/%lore%/${{ steps.compilelore.outputs.LORE }}/g" {} +
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: ${{ env.NAME }}-${{ steps.info.outputs.VERSION }}
+          name: ${{ env.NAME }}-${{ steps.version.outputs.VERSION }}
           path: ${{ github.workspace }}

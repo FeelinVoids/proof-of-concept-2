@@ -35,7 +35,7 @@ jobs:
 
       - name: Compile lore
         id: compilelore
-        run: echo "LORE=$(java -jar mm2json-1.0-SNAPSHOT-all.jar -f lore.txt)" >> $GITHUB_OUTPUT
+        run: echo "LORE=$(java -jar mm2json-1.0-SNAPSHOT-all.jar -e -f lore.txt)" >> $GITHUB_OUTPUT
 
       - name: Delete unnecessary directories
         run: find "${{ github.workspace }}/"* -maxdepth 0 -type d ! -name "assets" -exec sudo rm -r {} \;
